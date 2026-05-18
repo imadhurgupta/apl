@@ -1,3 +1,16 @@
+# ── Secrets & credentials — NEVER commit these ──
+.env
+*.key
+*.pem
+*.p12
+*.json
+!.env.example
+
+# Google Cloud credential files
+application_default_credentials.json
+service-account*.json
+gcloud/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -7,19 +20,23 @@ __pycache__/
 venv/
 env/
 .venv/
+*.egg-info/
+dist/
+build/
 
-# Environment secrets — NEVER commit this
-.env
-
-# Flask/editor
+# Flask / Runtime
 instance/
 .pytest_cache/
 *.log
+*.sqlite
 
-# OS
+# OS artifacts
 .DS_Store
 Thumbs.db
+Desktop.ini
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo

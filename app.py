@@ -541,4 +541,7 @@ def sync():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000, threaded=True)
+    port = int(os.environ.get("PORT", 5000))
+    # debug=True only in local dev; Cloud Run uses gunicorn
+    is_local = os.environ.get("ENVIRONMENT") != "production"
+    app.run(host="0.0.0.0", port=port, debug=is_local, threaded=True)

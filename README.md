@@ -1,3 +1,5 @@
+© 2026 Madhur Gupta. All rights reserved.
+
 # 🏏 IPL Hype Hub
 
 > **The ultimate AI-powered second-screen experience for IPL cricket fans.**  

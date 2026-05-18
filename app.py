@@ -478,9 +478,11 @@ Respond with ONE short, high-energy reaction to their emoji (1 sentence, max 15 
     if len(crowd_reaction_buffer) > 30:
         crowd_reaction_buffer.pop(0)
 
-    # Every CROWD_TRIGGER reactions → fire one mutual crowd pulse
+    # Dynamic threshold: 1 fan → every 3 reactions; more fans → scales up
+    real_fans = get_real_fan_count()
+    dynamic_trigger = max(3, real_fans * 3)
     total_count = sum(reaction_counts.values())
-    if total_count % CROWD_TRIGGER == 0 and total_count > 0:
+    if total_count % dynamic_trigger == 0 and total_count > 0:
         mutual_text = build_mutual_reaction(list(crowd_reaction_buffer), sender)
         current_hype = min(100, current_hype + 12)
         msg_id_counter += 1
@@ -495,13 +497,28 @@ Respond with ONE short, high-energy reaction to their emoji (1 sentence, max 15 
 
     return jsonify({"success": True})
 
+# ── Real Session Tracker ──
+import time as _time
+active_sessions = {}  # {session_id: (fan_name, last_seen_timestamp)}
+SESSION_TIMEOUT = 30  # seconds of inactivity before a fan is considered gone
+
+def get_real_fan_count():
+    now = _time.time()
+    return sum(1 for _, ts in active_sessions.values() if now - ts < SESSION_TIMEOUT)
+
 @app.route("/sync", methods=["GET"])
 def sync():
-    global current_hype, connected_fans
+    global current_hype
     last_id = int(request.args.get("last_id", 0))
     last_reaction_id = int(request.args.get("last_reaction_id", 0))
+    sid = request.args.get("sid", "anon")
+    fan_name = request.args.get("fan", "Fan")
+
+    # Register/refresh this session heartbeat
+    active_sessions[sid] = (fan_name, _time.time())
+
     current_hype = max(10, current_hype - 0.4)
-    connected_fans = max(50, connected_fans + random.randint(-2, 3))
+    real_fans = get_real_fan_count()
 
     if random.random() < 0.25:
         simulate_score()
@@ -510,6 +527,9 @@ def sync():
     # Each client gets only reactions it hasn't seen yet — no clearing!
     new_reactions = [r for r in reactions_log if r["id"] > last_reaction_id]
 
+    # Dynamic crowd trigger label for display
+    fan_label = f"{real_fans} fan" + ("s" if real_fans != 1 else "")
+
     return jsonify({
         "hype_level": int(current_hype),
         "sentiment": sentiment_breakdown,
@@ -517,7 +537,7 @@ def sync():
         "reactions": [r["emoji"] for r in new_reactions],
         "last_reaction_id": reactions_log[-1]["id"] if reactions_log else 0,
         "score": score_data,
-        "connected_fans": connected_fans
+        "connected_fans": fan_label
     })
 
 if __name__ == "__main__":

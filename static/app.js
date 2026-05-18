@@ -177,12 +177,12 @@ function triggerShake() {
 async function sync() {
   if (!polling) return;
   try {
-    const r = await fetch(`/sync?last_id=${lastId}&last_reaction_id=${lastReactionId}`);
+    const r = await fetch(`/sync?last_id=${lastId}&last_reaction_id=${lastReactionId}&sid=${sessionId}&fan=${encodeURIComponent(myName)}`);
     const d = await r.json();
     setHype(d.hype_level);
     if (d.sentiment) setSentiment(d.sentiment);
     if (d.score) setScore(d.score);
-    if (d.connected_fans) liveCount.textContent = d.connected_fans.toLocaleString();
+    if (d.connected_fans !== undefined) liveCount.textContent = d.connected_fans;
     // Update our reaction cursor — never re-show old reactions
     if (typeof d.last_reaction_id !== 'undefined') lastReactionId = d.last_reaction_id;
     (d.messages||[]).forEach(m => {

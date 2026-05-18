@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>IPL Hype Hub — Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ── ONBOARDING OVERLAY ── -->
+<div class="overlay" id="overlay">
+    <div class="setup-card">
+    <h1>🏏 <span>IPL</span> HYPE HUB</h1>
+    <p>Enter your fan name and join the live stadium!</p>
+    <input class="field" id="fanName" type="text" placeholder="Your fan name (e.g. ThalaFan99)" maxlength="24" autofocus>
+    <button class="btn-enter" onclick="startApp()">🔥 Enter Stadium</button>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div class="app">
+
+  <!-- Sidebar: Hype Meter -->
+  <div class="sidebar">
+    <div class="logo">HYPE HUB</div>
+    <div class="hype-bar-wrap">
+      <div class="hype-fill" id="hypeFill"></div>
+    </div>
+    <div class="hype-pct" id="hypePct">20%</div>
+  </div>
+
+  <!-- Main Column -->
+  <div class="main">
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+      <div class="score-left">
+        <div class="score-teams">
+          <span class="bat" id="batTeam">CSK</span>
+          <span class="vs">vs</span>
+          <span id="bowlTeam">MI</span>
+        </div>
+        <div class="score-runs" id="runsWick">0/0</div>
+        <div class="score-ov" id="overs">(0.0)</div>
+      </div>
+      <div class="score-right">
+        <span class="target-tag" id="target">Target: --</span>
+        <div class="players">
+          🏏 <span id="bat1">Loading...</span> &amp; <span id="bat2">...</span>
+        </div>
+        <div>⚾ <span id="bowler">Loading...</span></div>
+        <div class="last-event" id="lastEvt">Match in Progress</div>
+      </div>
+    </div>
+
+    <!-- Crowd Sentiment -->
+    <div class="sentiment-panel">
+      <div class="sentiment-label">
+        <span>📊 Crowd Sentiment</span>
+        <span id="sentimentText">Loading...</span>
+      </div>
+      <div class="sentiment-bars">
+        <div class="s-seg s-hype"    id="sHype"    style="width:40%"></div>
+        <div class="s-seg s-happy"   id="sHappy"   style="width:30%"></div>
+        <div class="s-seg s-nervous" id="sNervous" style="width:20%"></div>
+        <div class="s-seg s-angry"   id="sAngry"   style="width:10%"></div>
+      </div>
+    </div>
+
+    <!-- Action Dock -->
+    <div class="dock">
+      <button class="dock-btn" onclick="triggerAction('reaction')">😱 Crazy Play!</button>
+      <button class="dock-btn" onclick="triggerAction('roast')">🔥 Roast Rival</button>
+      <button class="dock-btn" onclick="triggerAction('cheer')">🙌 Chant</button>
+      <button class="dock-btn" onclick="triggerAction('meme')">😂 Meme Drop</button>
+      <button class="dock-btn" onclick="triggerAction('sentiment')">📊 Vibe Check</button>
+      <button class="dock-btn p" onclick="triggerPoll()">🗳 Live Poll</button>
+      <button class="dock-btn t" onclick="triggerTrivia()">🧠 Trivia</button>
+      <div class="live-count"><div class="live-dot"></div><span id="liveCount">...</span> fans</div>
+    </div>
+
+    <!-- Chat Feed -->
+    <div class="feed" id="feed">
+      <div class="msg system">
+        <div class="bubble">Welcome to IPL Hype Hub — the match is LIVE! Pick a side and start the noise! 🏏🔥</div>
+      </div>
+    </div>
+
+    <!-- Floating FX -->
+    <div id="fx"></div>
+
+    <!-- Quick Reactions (primary interaction) -->
+    <div class="react-dock">
+      <button class="react-btn" onclick="sendReaction('🔥')" title="Fire">🔥</button>
+      <button class="react-btn" onclick="sendReaction('🏏')" title="Cricket">🏏</button>
+      <button class="react-btn" onclick="sendReaction('😱')" title="Shocked">😱</button>
+      <button class="react-btn" onclick="sendReaction('👏')" title="Clap">👏</button>
+      <button class="react-btn" onclick="sendReaction('💔')" title="Heartbreak">💔</button>
+      <button class="react-btn" onclick="sendReaction('🚀')" title="Rocket">🚀</button>
+      <button class="react-btn" onclick="sendReaction('😂')" title="LOL">😂</button>
+      <button class="react-btn" onclick="sendReaction('💪')" title="Strong">💪</button>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script src="/static/app.js"></script>
+</body>
+</html>
